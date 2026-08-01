@@ -2,14 +2,12 @@ import "./style.css";
 (function () {
   "use strict";
 
-  // ---------------- Config ----------------
   var COLS = 9;
   var INITIAL_ROWS = 6;
   var MAX_ROWS = 14;
 
-  // ---------------- State ----------------
   var idCounter = 0;
-  var grid = []; // array of { rowId, cells: [{id,value}] }
+  var grid = [];
   var score = 0;
   var combo = 0;
   var comboTimer = null;
@@ -24,7 +22,6 @@ import "./style.css";
     hoverValid = false,
     hoverOccupied = false;
 
-  // ---------------- DOM refs ----------------
   var boardEl = document.getElementById("board");
   var scoreVal = document.getElementById("score-val");
   var comboVal = document.getElementById("combo-val");
@@ -35,7 +32,6 @@ import "./style.css";
 
   document.documentElement.style.setProperty("--cols", COLS);
 
-  // ---------------- Helpers: grid ----------------
   function separateDiagonalPairs(vals, cols) {
     const rows = Math.ceil(vals.length / cols);
 
@@ -43,7 +39,6 @@ import "./style.css";
       const r = Math.floor(i / cols);
       const c = i % cols;
 
-      // Check down-right
       if (r < rows - 1 && c < cols - 1) {
         const j = i + cols + 1;
 
@@ -53,7 +48,6 @@ import "./style.css";
         }
       }
 
-      // Check down-left
       if (r < rows - 1 && c > 0) {
         const j = i + cols - 1;
 
@@ -78,11 +72,6 @@ import "./style.css";
     return arr;
   }
 
-  // Builds `total` numbers as guaranteed equal/sum-10 pairs (plus one 0
-  // "spacer" if total is odd), then shuffles their positions. This is what
-  // actually makes a full clear reachable: matches always remove exactly two
-  // tiles, so the board's *starting* count of real numbers has to be even,
-  // and every number needs a genuine partner somewhere in the set.
   function generatePairedValues(total) {
     var vals = [];
     var pairCount = Math.floor(total / 2);
@@ -185,7 +174,7 @@ import "./style.css";
     return null;
   }
 
-  // ---------------- Audio ----------------
+  // Audio
   var soundOn = true;
 
   function getAudioCtx() {
@@ -196,8 +185,7 @@ import "./style.css";
     }
     return audioCtx;
   }
-  // Browsers start AudioContext "suspended" until a user gesture resumes it.
-  // Call this on the first pointerdown/click so every later beep is audible.
+
   function unlockAudio() {
     var ctx = getAudioCtx();
     if (ctx && ctx.state === "suspended") {
@@ -231,7 +219,6 @@ import "./style.css";
     } catch (e) {}
   }
 
-  // two soft high notes that rise slightly with combo — the "match" chime
   function playMatchSound(comboN) {
     var step = Math.min(comboN, 8) * 40;
     beep(720 + step, 0.1, "sine", 0.07);
@@ -244,19 +231,15 @@ import "./style.css";
       }, 115);
     }
   }
-  // short downward buzz for an illegal drop
   function playErrorSound() {
     beep(220, 0.14, "sawtooth", 0.045, { slideTo: 90 });
   }
-  // light tick while hovering a *valid* target during drag (fires on change only)
   function playHoverTick() {
     beep(1500, 0.045, "sine", 0.02);
   }
-  // quiet click for toolbar buttons
   function playClickSound() {
     beep(500, 0.05, "square", 0.02);
   }
-  // little ascending fanfare when the board clears
   function playWinSound() {
     [0, 1, 2, 3].forEach(function (i) {
       setTimeout(function () {
@@ -265,7 +248,6 @@ import "./style.css";
     });
   }
 
-  // ---------------- Rendering ----------------
   function render() {
     boardEl.innerHTML = "";
     for (var r = 0; r < grid.length; r++) {
@@ -289,12 +271,10 @@ import "./style.css";
       }
       boardEl.appendChild(rowEl);
     }
-    // svg overlay + badge (re-append, since innerHTML cleared it)
     boardEl.appendChild(svgLayer);
     boardEl.appendChild(midBadge);
   }
 
-  // ---------------- SVG line layer ----------------
   var svgLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svgLayer.setAttribute("id", "line-layer");
   var glowFilter = document.createElementNS(
@@ -333,7 +313,7 @@ import "./style.css";
     dragLine.setAttribute("stroke", color);
   }
 
-  // ---------------- Drag interaction ----------------
+  // Drag interaction
   function boardRect() {
     return boardEl.getBoundingClientRect();
   }
@@ -492,7 +472,6 @@ import "./style.css";
 
   boardEl.addEventListener("pointerdown", onPointerDown);
 
-  // ---------------- Match / scoring ----------------
   function spawnParticles(x, y, color) {
     for (var i = 0; i < 8; i++) {
       var p = document.createElement("div");
@@ -578,7 +557,6 @@ import "./style.css";
     }, 230);
   }
 
-  // ---------------- Row collapse (FLIP) ----------------
   function afterBoardChange() {
     var emptyIdx = [];
     for (var r = 0; r < grid.length; r++) {
@@ -633,7 +611,6 @@ import "./style.css";
     document.getElementById("add-btn").disabled = false;
   }
 
-  // ---------------- Toolbar actions ----------------
   function addNumbers() {
     var remaining = [];
     for (var r = 0; r < grid.length; r++) {
@@ -735,7 +712,6 @@ import "./style.css";
     }
   }
 
-  // shared click-sound + audio unlock for every toolbar button
   document
     .querySelectorAll(".toolbar .btn, #banner-add-btn, #win-restart")
     .forEach(function (btn) {
@@ -757,7 +733,6 @@ import "./style.css";
   document.getElementById("win-restart").addEventListener("click", restart);
   document.getElementById("sound-btn").addEventListener("click", toggleSound);
 
-  // prevent page scroll while interacting with board on touch devices
   boardEl.addEventListener(
     "touchmove",
     function (e) {
@@ -766,6 +741,5 @@ import "./style.css";
     { passive: false },
   );
 
-  // ---------------- Boot ----------------
   restart();
 })();
