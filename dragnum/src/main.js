@@ -3,8 +3,8 @@ import "./style.css";
   "use strict";
 
   var COLS = 9;
-  var INITIAL_ROWS = 6;
-  var MAX_ROWS = 14;
+  var INITIAL_ROWS = 8;
+  var MAX_ROWS = 11;
 
   var idCounter = 0;
   var grid = [];
@@ -77,7 +77,7 @@ import "./style.css";
     var pairCount = Math.floor(total / 2);
     for (var i = 0; i < pairCount; i++) {
       var a = randomValue();
-      var b = Math.random() < 0.5 ? a : 10 - a;
+      var b = Math.random() < 0.2 ? a : 10 - a;
       vals.push(a, b);
     }
     if (total % 2 === 1) vals.push(0);
@@ -611,6 +611,28 @@ import "./style.css";
     document.getElementById("add-btn").disabled = false;
   }
 
+  function shuffleBoard() {
+    var vals = [];
+    for (var r = 0; r < grid.length; r++)
+      for (var c = 0; c < COLS; c++)
+        if (grid[r].cells[c].value !== 0) vals.push(grid[r].cells[c].value);
+    for (var i = vals.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = vals[i];
+      vals[i] = vals[j];
+      vals[j] = tmp;
+    }
+    var k = 0;
+    for (var r2 = 0; r2 < grid.length; r2++) {
+      for (var c2 = 0; c2 < COLS; c2++) {
+        if (grid[r2].cells[c2].value !== 0)
+          grid[r2].cells[c2].value = vals[k++];
+      }
+    }
+    render();
+    postRenderChecks();
+  }
+
   function addNumbers() {
     var remaining = [];
     for (var r = 0; r < grid.length; r++) {
@@ -638,27 +660,6 @@ import "./style.css";
     postRenderChecks();
   }
 
-  function shuffleBoard() {
-    var vals = [];
-    for (var r = 0; r < grid.length; r++)
-      for (var c = 0; c < COLS; c++)
-        if (grid[r].cells[c].value !== 0) vals.push(grid[r].cells[c].value);
-    for (var i = vals.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = vals[i];
-      vals[i] = vals[j];
-      vals[j] = tmp;
-    }
-    var k = 0;
-    for (var r2 = 0; r2 < grid.length; r2++) {
-      for (var c2 = 0; c2 < COLS; c2++) {
-        if (grid[r2].cells[c2].value !== 0)
-          grid[r2].cells[c2].value = vals[k++];
-      }
-    }
-    render();
-    postRenderChecks();
-  }
 
   function showHint() {
     var move = findValidMove();

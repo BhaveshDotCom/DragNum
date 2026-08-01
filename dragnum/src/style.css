@@ -26,6 +26,7 @@
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  font-weight: 900;
 }
 html,
 body {
