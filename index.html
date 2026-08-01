@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="./src/style.css">
+<link rel="shortcut icon" href="./public/logo.png" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Drag Num</title>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <div class="brand-mark">Drag Num <span class="sum">Σ=10</span></div>
+      <div class="brand-sub">drag to connect equal pairs, or pairs that sum to 10</div>
+    </div>
+    <div class="stats">
+      <div class="stat-pill">
+        <span class="label">Score</span>
+        <span class="value" id="score-val">0</span>
+      </div>
+      <div class="stat-pill combo" id="combo-pill">
+        <span class="label">Combo</span>
+        <span class="value" id="combo-val">×0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="hint-btn" title="Highlight a valid move">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.5.4.9 1.1 1 1.8v.5h6v-.5c.1-.7.5-1.4 1-1.8A7 7 0 0 0 12 2z"/></svg>
+      Hint
+    </button>
+    <button class="btn" id="shuffle-btn" title="Shuffle remaining numbers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Shuffle
+    </button>
+    <button class="btn primary" id="add-btn" title="Deal remaining numbers again">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Add Numbers
+    </button>
+    <button class="btn" id="restart-btn" title="Restart game">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </button>
+    <button class="btn" id="sound-btn" title="Mute / unmute sound">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 6a9 9 0 0 1 0 12"/></svg>
+    </button>
+  </div>
+
+  <div class="banner" id="no-moves-banner">
+    <span>No matches left on the board.</span>
+    <button id="banner-add-btn">Deal More</button>
+  </div>
+
+  <div class="board-wrap">
+    <div id="board"></div>
+  </div>
+
+  <div class="footer-hint">Drag from one tile to another with the <b>same number</b> or numbers that <b>add up to 10</b>. Move only in a straight row, column, or diagonal.</div>
+  <br />
+</div>
+
+<div class="overlay" id="win-overlay">
+  <div class="overlay-card">
+    <img src="./public/trophy.svg" alt="Trophy" class="icon" style="width:10em">
+    <h2>Board cleared</h2>
+    <div class="final-score" id="win-score">0</div>
+    <p>Every tile paired off. Clean proof.</p>
+    <button class="btn primary" id="win-restart" style="justify-content:center;width:100%;padding:11px;">Play Again</button>
+  </div>
+</div>
+<script src="./src/main.js"></script>
+</body>
+</html>
